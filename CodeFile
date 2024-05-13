@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <iomanip>
+
+
+int main() {
+    int balance = 1000; // Initial balance
+    int starting_bet = 10; // Initial bet amount
+    int bet = starting_bet;
+    int num_rounds=0;
+    int rounds = 0;
+    
+
+    srand(time(NULL)); // Seed the random number generator with current time
+
+	std::cout<<"How many rounds do you want to play?";
+	std::cin>>num_rounds;
+
+	
+	
+    while (rounds < num_rounds && balance > 0) {
+        int result = rand() % 37; // Generating a random number between 0 and 36 (inclusive)
+
+        if (result % 2 == 0 && result != 0) { // Even numbers are considered wins
+            balance += bet;
+            std::cout<<bet;
+            bet = starting_bet;
+            std::cout<<" W: ";
+        } else if(result % 2 == 1 || result == 0) { // Odd numbers are considered losses including 0
+            balance -= bet;
+            std::cout<<bet;
+            bet *= 2;
+            std::cout<<" L: ";
+        }
+
+        rounds++;
+        std::cout << "Round: " << rounds << " Balance: " << balance << std::endl;
+    }
+
+    if (balance <= 0) {
+        std::cout << "You went bankrupt!" << std::endl;
+    } 
+	else {
+        std::cout << "You reached the maximum number of rounds." << std::endl;
+    }
+
+    return 0;
+}
