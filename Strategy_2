@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define RED 1
+#define BLACK 0
+#define GREEN -1
+
+// Function to spin the roulette wheel
+int spin_roulette() {
+    int result = rand() % 38;  // 0-37, where 0-17 are red, 18-35 are black, 36 is 0, and 37 is 00
+    if (result < 18) {
+        return RED;
+    } else if (result < 36) {
+        return BLACK;
+    } else {
+        return GREEN;
+    }
+}
+
+int main() {
+    srand(time(NULL));  // Seed the random number generator
+    
+    int initial_bet = 1;
+    int bet = initial_bet;
+    int balance = 100;  // Starting balance
+    int goal = 200;     // Goal balance to reach
+    int spins = 0;      // Count of number of spins
+    
+    while (balance > 0 && balance < goal) {
+        int outcome = spin_roulette();
+        spins++;
+        
+        if (outcome == RED) {
+            balance += bet;
+            bet = (bet > initial_bet) ? bet - 1 : initial_bet;  // Decrease bet after a win
+        } else if (outcome == BLACK || outcome == GREEN) {
+            balance -= bet;
+            bet++;  // Increase bet after a loss
+        }
+        
+        printf("Spin %d: Outcome = %s, Bet = %d, Balance = %d\n", spins, 
+               (outcome == RED) ? "RED" : ((outcome == BLACK) ? "BLACK" : "GREEN"), bet, balance);
+    }
+    
+    if (balance >= goal) {
+        printf("Goal reached! Final Balance = %d after %d spins\n", balance, spins);
+    } else {
+        printf("Bankrupt! Final Balance = %d after %d spins\n", balance, spins);
+    }
+    
+    return 0;
+}
